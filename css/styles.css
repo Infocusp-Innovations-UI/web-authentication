@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    line-height: 1.6;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 100%;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+p {
+    color: green;
+}
+
+/* Glass-like effect for the login card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Smaller button styling */
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 5px 10px;
+}
+
+/* Float-end alignment for buttons */
+.float-end {
+    float: right;
+}
+
+/* Flexbox alignment for buttons */
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
