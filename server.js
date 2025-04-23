@@ -1,3 +1,12 @@
+/**
+ * Main Server Configuration
+ * Flow:
+ * 1. Initialize Express server
+ * 2. Set up static file serving
+ * 3. Configure routes
+ * 4. Start HTTPS/HTTP server based on SSL availability
+ */
+
 const express = require('express');
 const fs = require('fs');
 const https = require('https');
@@ -7,41 +16,39 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Serve static files from the project directory
+// Initialize Express middleware
 app.use(express.static(path.join(__dirname)));
 
-// Serve register.html as the default page for the root URL
+// Route Handlers
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'register.html'));
 });
 
-// Serve login.html for the /login route
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
 
-// Fallback route for 404 errors
+// Error handling
 app.use((req, res) => {
     res.status(404).send('Page not found');
 });
 
-// Check if SSL certificates exist
+// Server initialization with SSL check
 const sslKeyPath = path.join(__dirname, 'ssl', 'key.pem');
 const sslCertPath = path.join(__dirname, 'ssl', 'cert.pem');
 
+// Start server with appropriate protocol
 if (fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)) {
-    // HTTPS server
     const options = {
         key: fs.readFileSync(sslKeyPath),
         cert: fs.readFileSync(sslCertPath),
     };
     https.createServer(options, app).listen(PORT, () => {
-        console.log(`Server running at https://localhost:${PORT}`);
+        console.log(`Secure server running at https://localhost:${PORT}`);
     });
 } else {
-    // HTTP server
     http.createServer(app).listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
-        console.log('To enable HTTPS, generate SSL certificates and place them in the "ssl" folder.');
+        console.log('Warning: HTTPS recommended for security. Generate SSL certificates using npm run generate-cert');
     });
 }
