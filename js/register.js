@@ -11,11 +11,9 @@ import { bufferToBase64, generateRandomChallenge } from './utils.js';
 document.getElementById('register-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     
-    // Step 1: Get user information
     const username = document.getElementById('username').value;
     const challenge = generateRandomChallenge();
 
-    // Step 2: Prepare registration options
     const publicKey = {
         challenge,
         rp: { name: "Infocusp Innovations" },
@@ -24,15 +22,24 @@ document.getElementById('register-form').addEventListener('submit', async (event
             name: username,
             displayName: username,
         },
-        pubKeyCredParams: [{ type: "public-key", alg: -7 }], // ES256 algorithm
+        pubKeyCredParams: [{ type: "public-key", alg: -7 }],
     };
 
     try {
-        // Step 3: Create credentials
         const credential = await navigator.credentials.create({ publicKey });
+        const credentialId = bufferToBase64(credential.rawId);
         
-        // Step 4: Store credential ID
-        localStorage.setItem('credentialId', bufferToBase64(credential.rawId));
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                username, 
+                credential: credentialId 
+            })
+        });
+
+        if (!response.ok) throw new Error('Registration failed');
+        
         document.getElementById('message').textContent = 'Registration successful!';
     } catch (error) {
         console.error('Error during registration:', error);

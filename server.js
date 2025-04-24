@@ -12,12 +12,41 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const path = require('path');
+const bodyParser = require('body-parser');
+const db = require('./db/db');
 
 const app = express();
 const PORT = 3000;
 
 // Initialize Express middleware
 app.use(express.static(path.join(__dirname)));
+app.use(bodyParser.json());
+
+// API Endpoints
+app.post('/api/register', (req, res) => {
+    const { username, credential } = req.body;
+    
+    if (db.findUser(username)) {
+        return res.status(400).json({ error: 'User already exists' });
+    }
+
+    db.saveUser({ username, credential });
+    res.json({ success: true });
+});
+
+app.post('/api/login', (req, res) => {
+    const { username } = req.body;
+    const user = db.findUser(username);
+    
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ 
+        success: true, 
+        credential: user.credential 
+    });
+});
 
 // Route Handlers
 app.get('/', (req, res) => {
