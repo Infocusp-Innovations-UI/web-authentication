@@ -16,7 +16,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/db');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Initialize Express middleware
 app.use(express.static(path.join(__dirname)));

@@ -13,16 +13,23 @@ document.getElementById('register-form').addEventListener('submit', async (event
     
     const username = document.getElementById('username').value;
     const challenge = generateRandomChallenge();
+    console.log('challenge by register:', challenge);
 
     const publicKey = {
         challenge,
-        rp: { name: "Infocusp Innovations" },
+        rp: { name: "Infocusp Innovations", id: "localhost" },
         user: {
-            id: Uint8Array.from(username, c => c.charCodeAt(0)),
+            id: new TextEncoder().encode(crypto.randomUUID()),
             name: username,
             displayName: username,
         },
-        pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+        pubKeyCredParams: [
+            { type: "public-key", alg: -7 },   // ES256 (Elliptic Curve - most common)
+            { type: "public-key", alg: -257 }, // RS256 (RSA with SHA-256)
+            { type: "public-key", alg: -37 },  // PS256 (RSA-PSS with SHA-256)
+            { type: "public-key", alg: -35 },  // ES384 (ECDSA with P-384 curve)
+            { type: "public-key", alg: -36 },  // ES512 (ECDSA with P-521 curve)
+        ],
     };
 
     try {

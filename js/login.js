@@ -28,6 +28,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         }
 
         const challenge = generateRandomChallenge();
+        console.log('challenge by login:', challenge);
         const publicKey = {
             challenge,
             allowCredentials: [{
